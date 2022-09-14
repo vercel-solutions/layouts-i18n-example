@@ -2,6 +2,7 @@ import type {GetStaticProps} from "next";
 
 import {ParsedUrlQuery} from "querystring";
 
+import api from "../../api";
 import Counter from "../../components/Counter.client";
 
 type Props = {
@@ -13,9 +14,7 @@ type Params = ParsedUrlQuery & {
 };
 
 export const getStaticProps: GetStaticProps<Props, Params> = async ({params}) => {
-  const translations: Record<string, string> = await import(
-    `../../translations/${params!.locale}`
-  ).then((res) => res.default);
+  const translations = await api.translations.fetch(params?.locale);
 
   return {
     props: {
